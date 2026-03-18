@@ -1,0 +1,17 @@
+name: JJL Remote Support - Windows Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      upload-tag:
+        description: 'Release tag name'
+        required: false
+        default: 'jjl-nightly'
+
+jobs:
+  run-windows-build:
+    uses: ./.github/workflows/flutter-build.yml
+    secrets: inherit
+    with:
+      upload-artifact: true
+      upload-tag: ${{ inputs.upload-tag }}

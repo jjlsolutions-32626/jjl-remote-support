@@ -1783,6 +1783,28 @@ pub fn rustdesk_interval(i: Interval) -> ThrottledInterval {
 }
 
 pub fn load_custom_client() {
+    // JJL Computer Solutions: hardcode server configuration
+    {
+        use hbb_common::config;
+        let mut settings = config::DEFAULT_SETTINGS.write().unwrap();
+        settings.insert("custom-rendezvous-server".to_owned(), "216.36.192.101".to_owned());
+        settings.insert("relay-server".to_owned(), "216.36.192.101".to_owned());
+        settings.insert("key".to_owned(), "CPeBf1+++1W92iaQXgY1nBYvwoozEWlhUc+KTmkV89A=".to_owned());
+    }
+    {
+        use hbb_common::config;
+        let mut overwrite = config::OVERWRITE_SETTINGS.write().unwrap();
+        overwrite.insert("custom-rendezvous-server".to_owned(), "216.36.192.101".to_owned());
+        overwrite.insert("relay-server".to_owned(), "216.36.192.101".to_owned());
+        overwrite.insert("key".to_owned(), "CPeBf1+++1W92iaQXgY1nBYvwoozEWlhUc+KTmkV89A=".to_owned());
+    }
+    // Also hide server settings so users can't change them
+    {
+        use hbb_common::config;
+        let mut builtin = config::BUILTIN_SETTINGS.write().unwrap();
+        builtin.insert("hide-server-settings".to_owned(), "Y".to_owned());
+    }
+
     #[cfg(debug_assertions)]
     if let Ok(data) = std::fs::read_to_string("./custom.txt") {
         read_custom_client(data.trim());
