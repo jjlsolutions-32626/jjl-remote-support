@@ -169,7 +169,11 @@ jobs:
           python3 .\build.py --portable --hwcodec --flutter --vram --skip-portable-pack
           mv ./flutter/build/windows/x64/runner/Release ./rustdesk
           # Rename the exe to "JJL Remote Support.exe" for branding
-          if (Test-Path "./rustdesk/rustdesk.exe") { Rename-Item "./rustdesk/rustdesk.exe" "JJL Remote Support.exe" }
+          if (Test-Path "./rustdesk/rustdesk.exe") {
+            Move-Item -Force "./rustdesk/rustdesk.exe" "./rustdesk/JJL Remote Support.exe"
+            Write-Output "Renamed rustdesk.exe to 'JJL Remote Support.exe'"
+            Get-ChildItem "./rustdesk/*.exe"
+          }
 
           # Download usbmmidd_v2.zip and extract it to ./rustdesk
           Invoke-WebRequest -Uri https://github.com/rustdesk-org/rdev/releases/download/usbmmidd_v2/usbmmidd_v2.zip -OutFile usbmmidd_v2.zip
