@@ -402,7 +402,7 @@ jobs:
         if: env.UPLOAD_ARTIFACT == 'true'
         uses: actions/upload-artifact@master
         with:
-          name: rustdesk-unsigned-windows-${{ matrix.job.arch }}
+          name: jjl-remote-support-unsigned-windows-${{ matrix.job.arch }}
           path: Release
 
       - name: Sign rustdesk files
@@ -799,13 +799,13 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@master
         with:
-          name: rustdesk-unsigned-windows-x86_64
+          name: jjl-remote-support-unsigned-windows-x86_64
           path: ./windows-x86_64/
 
       - name: Download Artifacts
         uses: actions/download-artifact@master
         with:
-          name: rustdesk-unsigned-windows-x86
+          name: jjl-remote-support-unsigned-windows-x86
           path: ./windows-x86/
 
       - name: Combine unsigned app
