@@ -462,7 +462,7 @@ def init_global_vars(dist_dir, exe_name, args):
 
     def read_process_output(args):
         process = subprocess.Popen(
-            f"{dist_app} {args}",
+            f'"{dist_app}" {args}',
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             shell=True,
