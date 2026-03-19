@@ -76,6 +76,9 @@ def make_parser():
         "--app-name", type=str, default="JJL Remote Support", help="The app name."
     )
     parser.add_argument(
+        "--exe-name", type=str, default="rustdesk", help="The executable name (without .exe) in the build directory."
+    )
+    parser.add_argument(
         "-v", "--version", type=str, default="", help="The app version."
     )
     parser.add_argument(
@@ -111,13 +114,13 @@ def read_lines_and_start_index(file_path, tag_start, tag_end):
     return lines, index_start
 
 
-def insert_components_between_tags(lines, index_start, app_name, dist_dir):
+def insert_components_between_tags(lines, index_start, exe_name, dist_dir):
     indent = g_indent_unit * 3
     path = Path(dist_dir)
     idx = 1
     for file_path in path.glob("**/*"):
         if file_path.is_file():
-            if file_path.name.lower() == f"{app_name}.exe".lower():
+            if file_path.name.lower() == f"{exe_name}.exe".lower():
                 continue
 
             subdir = str(file_path.parent.relative_to(path))
@@ -139,20 +142,20 @@ def insert_components_between_tags(lines, index_start, app_name, dist_dir):
     return True
 
 
-def gen_auto_component(app_name, dist_dir):
+def gen_auto_component(exe_name, dist_dir):
     return gen_content_between_tags(
         "Package/Components/RustDesk.wxs",
         "<!--$AutoComonentStart$-->",
         "<!--$AutoComponentEnd$-->",
         lambda lines, index_start: insert_components_between_tags(
-            lines, index_start, app_name, dist_dir
+            lines, index_start, exe_name, dist_dir
         ),
     )
 
 
-def gen_pre_vars(args, dist_dir):
+def gen_pre_vars(args, dist_dir, exe_name):
     def func(lines, index_start):
-        upgrade_code = uuid.uuid5(uuid.NAMESPACE_OID, app_name + ".exe")
+        upgrade_code = uuid.uuid5(uuid.NAMESPACE_OID, exe_name + ".exe")
 
         indent = g_indent_unit * 1
         to_insert_lines = [
@@ -454,8 +457,8 @@ def prepare_resources():
         return False
 
 
-def init_global_vars(dist_dir, app_name, args):
-    dist_app = dist_dir.joinpath(app_name + ".exe")
+def init_global_vars(dist_dir, exe_name, args):
+    dist_app = dist_dir.joinpath(exe_name + ".exe")
 
     def read_process_output(args):
         process = subprocess.Popen(
@@ -525,17 +528,18 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     app_name = args.app_name
+    exe_name = args.exe_name
     dist_dir = Path(sys.argv[0]).parent.joinpath(args.dist_dir).resolve()
 
     if not prepare_resources():
         sys.exit(-1)
 
-    if not init_global_vars(dist_dir, app_name, args):
+    if not init_global_vars(dist_dir, exe_name, args):
         sys.exit(-1)
 
     update_license_file(app_name)
 
-    if not gen_pre_vars(args, dist_dir):
+    if not gen_pre_vars(args, dist_dir, exe_name):
         sys.exit(-1)
 
     if app_name != "RustDesk":
@@ -550,7 +554,7 @@ if __name__ == "__main__":
     if not gen_conn_type(args):
         sys.exit(-1)
 
-    if not gen_auto_component(app_name, dist_dir):
+    if not gen_auto_component(exe_name, dist_dir):
         sys.exit(-1)
 
     if not gen_custom_dialog_bitmaps():
