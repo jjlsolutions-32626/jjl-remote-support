@@ -92,9 +92,9 @@ BEGIN
             VALUE "CompanyName", "JJL Computer Solutions" "\0"
             VALUE "FileDescription", "JJL Remote Support" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "rustdesk" "\0"
+            VALUE "InternalName", "JJL Remote Support" "\0"
             VALUE "LegalCopyright", "Copyright © 2026 JJL Computer Solutions. All rights reserved." "\0"
-            VALUE "OriginalFilename", "rustdesk.exe" "\0"
+            VALUE "OriginalFilename", "JJL Remote Support.exe" "\0"
             VALUE "ProductName", "JJL Remote Support" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END

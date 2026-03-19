@@ -6,6 +6,8 @@ edition = "2021"
 build= "build.rs"
 description = "JJL Remote Support"
 default-run = "rustdesk"
+# Note: The Rust binary is still named "rustdesk" internally.
+# The installer and workflow rename it to "JJL Remote Support.exe" for display.
 rust-version = "1.75"
 
 [lib]
@@ -213,9 +215,9 @@ exclude = ["vdi/host", "examples/custom_plugin"]
 libxdo-sys = { path = "libs/libxdo-sys-stub" }
 
 [package.metadata.winres]
-LegalCopyright = "Copyright © 2025 Purslane Ltd. All rights reserved."
-ProductName = "RustDesk"
-FileDescription = "RustDesk Remote Desktop"
+LegalCopyright = "Copyright © 2025 JJL Computer Solutions. All rights reserved."
+ProductName = "JJL Remote Support"
+FileDescription = "JJL Remote Support"
 OriginalFilename = "rustdesk.exe"
 
 [target.'cfg(target_os="windows")'.build-dependencies]
@@ -232,8 +234,8 @@ hound = "3.5"
 docopt = "1.1"
 
 [package.metadata.bundle]
-name = "RustDesk"
-identifier = "com.carriez.rustdesk"
+name = "JJL Remote Support"
+identifier = "com.jjlsolutions.remotesupport"
 icon = ["res/32x32.png", "res/128x128.png", "res/128x128@2x.png"]
 osx_minimum_system_version = "10.14"
 
