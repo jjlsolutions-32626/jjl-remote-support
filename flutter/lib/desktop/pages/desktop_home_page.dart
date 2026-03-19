@@ -468,7 +468,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           await rustDeskWinManager.closeAllSubWindows();
           bind.mainGotoInstall();
         });
-      } else if (bind.mainIsInstalledLowerVersion()) {
+      } else if (false && bind.mainIsInstalledLowerVersion()) {
+        // Disabled for JJL Remote Support custom build
         return buildInstallCard(
             "Status", "Your installation is lower version.", "Click to upgrade",
             () async {
