@@ -55,6 +55,7 @@ fn make_tray() -> hbb_common::ResultType<()> {
 
     let open_i = MenuItem::new(translate("Open".to_owned()), true, None);
     let ticket_i = MenuItem::new("Submit Help Ticket".to_owned(), true, None);
+    let portal_i = MenuItem::new("Helpdesk Portal".to_owned(), true, None);
     let quit_i = MenuItem::new(translate("Stop service".to_owned()), true, None);
     let tooltip = |count: usize| {
         if count == 0 {
@@ -132,6 +133,7 @@ fn make_tray() -> hbb_common::ResultType<()> {
             let tray_menu = Menu::new();
             tray_menu.append(&open_i).ok();
             tray_menu.append(&ticket_i).ok();
+            tray_menu.append(&portal_i).ok();
             tray_menu.append(&quit_i).ok();
             let tray = TrayIconBuilder::new()
                 .with_menu(Box::new(tray_menu))
@@ -179,6 +181,17 @@ fn make_tray() -> hbb_common::ResultType<()> {
                 #[cfg(not(windows))]
                 std::process::Command::new("xdg-open")
                     .arg("mailto:jjl_support@jjlsolutions.com?subject=Help%20Request")
+                    .spawn()
+                    .ok();
+            } else if event.id == portal_i.id() {
+                #[cfg(windows)]
+                std::process::Command::new("cmd")
+                    .args(&["/c", "start", "", "https://helpdesk.jjlsolutions.com"])
+                    .spawn()
+                    .ok();
+                #[cfg(not(windows))]
+                std::process::Command::new("xdg-open")
+                    .arg("https://helpdesk.jjlsolutions.com")
                     .spawn()
                     .ok();
             }

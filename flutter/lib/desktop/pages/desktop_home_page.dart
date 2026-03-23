@@ -278,6 +278,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           DesktopTabPage.onAddSetting?.call();
         } else if (value == 'submit_ticket') {
           launchUrl(Uri.parse('mailto:jjl_support@jjlsolutions.com?subject=Help%20Request'));
+        } else if (value == 'helpdesk_portal') {
+          launchUrl(Uri.parse('https://helpdesk.jjlsolutions.com'));
         }
       },
       itemBuilder: (context) => [
@@ -288,6 +290,16 @@ class _DesktopHomePageState extends State<DesktopHomePage>
               Icon(Icons.email_outlined, size: 18, color: textColor),
               const SizedBox(width: 8),
               Text('Submit Help Ticket'),
+            ],
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: 'helpdesk_portal',
+          child: Row(
+            children: [
+              Icon(Icons.open_in_browser_outlined, size: 18, color: textColor),
+              const SizedBox(width: 8),
+              Text('Helpdesk Portal'),
             ],
           ),
         ),
