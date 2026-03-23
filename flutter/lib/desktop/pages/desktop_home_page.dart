@@ -258,25 +258,51 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   Widget buildPopupMenu(BuildContext context) {
     final textColor = Theme.of(context).textTheme.titleLarge?.color;
     RxBool hover = false.obs;
-    return InkWell(
-      onTap: DesktopTabPage.onAddSetting,
-      child: Tooltip(
-        message: translate('Settings'),
-        child: Obx(
-          () => CircleAvatar(
-            radius: 15,
-            backgroundColor: hover.value
-                ? Theme.of(context).scaffoldBackgroundColor
-                : Theme.of(context).colorScheme.background,
-            child: Icon(
-              Icons.more_vert_outlined,
-              size: 20,
-              color: hover.value ? textColor : textColor?.withOpacity(0.5),
-            ),
+    return PopupMenuButton<String>(
+      icon: Obx(
+        () => CircleAvatar(
+          radius: 15,
+          backgroundColor: hover.value
+              ? Theme.of(context).scaffoldBackgroundColor
+              : Theme.of(context).colorScheme.background,
+          child: Icon(
+            Icons.more_vert_outlined,
+            size: 20,
+            color: hover.value ? textColor : textColor?.withOpacity(0.5),
           ),
         ),
       ),
-      onHover: (value) => hover.value = value,
+      tooltip: translate('Settings'),
+      onSelected: (value) {
+        if (value == 'settings') {
+          DesktopTabPage.onAddSetting?.call();
+        } else if (value == 'submit_ticket') {
+          launchUrl(Uri.parse('mailto:jjl_support@jjlsolutions.com?subject=Help%20Request'));
+        }
+      },
+      itemBuilder: (context) => [
+        PopupMenuItem<String>(
+          value: 'submit_ticket',
+          child: Row(
+            children: [
+              Icon(Icons.email_outlined, size: 18, color: textColor),
+              const SizedBox(width: 8),
+              Text('Submit Help Ticket'),
+            ],
+          ),
+        ),
+        const PopupMenuDivider(),
+        PopupMenuItem<String>(
+          value: 'settings',
+          child: Row(
+            children: [
+              Icon(Icons.settings_outlined, size: 18, color: textColor),
+              const SizedBox(width: 8),
+              Text(translate('Settings')),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
