@@ -284,22 +284,22 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       },
       itemBuilder: (context) => [
         PopupMenuItem<String>(
-          value: 'submit_ticket',
-          child: Row(
-            children: [
-              Icon(Icons.email_outlined, size: 18, color: textColor),
-              const SizedBox(width: 8),
-              Text('Submit Help Ticket'),
-            ],
-          ),
-        ),
-        PopupMenuItem<String>(
           value: 'helpdesk_portal',
           child: Row(
             children: [
               Icon(Icons.open_in_browser_outlined, size: 18, color: textColor),
               const SizedBox(width: 8),
               Text('Helpdesk Portal'),
+            ],
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: 'submit_ticket',
+          child: Row(
+            children: [
+              Icon(Icons.email_outlined, size: 18, color: textColor),
+              const SizedBox(width: 8),
+              Text('Submit Help Ticket'),
             ],
           ),
         ),

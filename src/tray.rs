@@ -132,8 +132,8 @@ fn make_tray() -> hbb_common::ResultType<()> {
             // to prevent issues like https://github.com/tauri-apps/tray-icon/issues/90
             let tray_menu = Menu::new();
             tray_menu.append(&open_i).ok();
-            tray_menu.append(&ticket_i).ok();
             tray_menu.append(&portal_i).ok();
+            tray_menu.append(&ticket_i).ok();
             tray_menu.append(&quit_i).ok();
             let tray = TrayIconBuilder::new()
                 .with_menu(Box::new(tray_menu))
