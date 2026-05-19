@@ -56,6 +56,7 @@ fn make_tray() -> hbb_common::ResultType<()> {
     let open_i = MenuItem::new(translate("Open".to_owned()), true, None);
     let ticket_i = MenuItem::new("Submit Help Ticket".to_owned(), true, None);
     let portal_i = MenuItem::new("Helpdesk Portal".to_owned(), true, None);
+    let troubleshoot_i = MenuItem::new("Troubleshoot This PC".to_owned(), true, None);
     let quit_i = MenuItem::new(translate("Stop service".to_owned()), true, None);
     let tooltip = |count: usize| {
         if count == 0 {
@@ -134,6 +135,7 @@ fn make_tray() -> hbb_common::ResultType<()> {
             tray_menu.append(&open_i).ok();
             tray_menu.append(&portal_i).ok();
             tray_menu.append(&ticket_i).ok();
+            tray_menu.append(&troubleshoot_i).ok();
             tray_menu.append(&quit_i).ok();
             let tray = TrayIconBuilder::new()
                 .with_menu(Box::new(tray_menu))
@@ -194,6 +196,22 @@ fn make_tray() -> hbb_common::ResultType<()> {
                     .arg("https://helpdesk.jjlsolutions.com")
                     .spawn()
                     .ok();
+            } else if event.id == troubleshoot_i.id() {
+                #[cfg(windows)]
+                {
+                    let exe_path = r"C:\Program Files\JJL Troubleshooter\JJL Troubleshooter.exe";
+                    if std::path::Path::new(exe_path).exists() {
+                        std::process::Command::new(exe_path).spawn().ok();
+                    } else {
+                        // Troubleshooter not installed yet — open install URL in default browser
+                        std::process::Command::new("cmd")
+                            .args(&["/c", "start", "", "https://downloads.jjlsolutions.com/JJL-Troubleshooter-Installer.exe"])
+                            .spawn()
+                            .ok();
+                    }
+                }
+                #[cfg(not(windows))]
+                log::info!("Troubleshooter menu clicked — Windows-only");
             }
         }
 
