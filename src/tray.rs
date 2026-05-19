@@ -111,8 +111,6 @@ fn make_tray() -> hbb_common::ResultType<()> {
     std::thread::spawn(move || {
         start_query_session_count(ipc_sender.clone());
     });
-    #[cfg(windows)]
-    let mut last_click = std::time::Instant::now();
     #[cfg(target_os = "macos")]
     {
         use tao::platform::macos::EventLoopExtMacOS;
@@ -141,6 +139,7 @@ fn make_tray() -> hbb_common::ResultType<()> {
                 .with_menu(Box::new(tray_menu))
                 .with_tooltip(tooltip(0))
                 .with_icon(icon.clone())
+                .with_menu_on_left_click(true)
                 .with_icon_as_template(true) // mac only
                 .build();
             match tray {
@@ -218,19 +217,12 @@ fn make_tray() -> hbb_common::ResultType<()> {
         if let Ok(_event) = tray_channel.try_recv() {
             #[cfg(target_os = "windows")]
             match _event {
-                TrayEvent::Click {
+                TrayEvent::DoubleClick {
                     button,
-                    button_state,
                     ..
                 } => {
-                    if button == tray_icon::MouseButton::Left
-                        && button_state == tray_icon::MouseButtonState::Up
-                    {
-                        if last_click.elapsed() < std::time::Duration::from_secs(1) {
-                            return;
-                        }
+                    if button == tray_icon::MouseButton::Left {
                         open_func();
-                        last_click = std::time::Instant::now();
                     }
                 }
                 _ => {}
